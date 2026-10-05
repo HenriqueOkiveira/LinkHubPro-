@@ -3,8 +3,8 @@
 <html lang="pt-BR" class="h-full dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkHub Pro - Vitrine & Bio Link</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LinkHub Pro - Vitrine & Bio Link Responsivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,6 +24,9 @@
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                    },
+                    screens: {
+                        'xs': '480px',
                     }
                 }
             }
@@ -36,14 +39,14 @@
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
             background: rgba(100, 116, 139, 0.3);
             border-radius: 999px;
         }
 
-        /* Styles for Preview Themes */
+        /* Themes for Mobile Preview */
         .preview-theme-emerald {
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             color: #065f46;
@@ -89,194 +92,210 @@
             color: #f8fafc;
         }
 
-        .device-frame {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        .device-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Prevent scrollbar hide issue on categories */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans h-full antialiased flex flex-col transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-full antialiased flex flex-col transition-colors duration-300 pb-16 md:pb-0">
 
     <!-- Top Navigation Header -->
-    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm transition-colors duration-300">
+    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                
                 <!-- Logo & Brand -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-md">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
                         L
                     </div>
                     <div>
-                        <h1 class="font-bold text-lg leading-none tracking-tight">LinkHub <span class="text-emerald-500">Pro</span></h1>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Vitrine de Produtos & Bio</p>
+                        <h1 class="font-bold text-base sm:text-lg leading-none tracking-tight">LinkHub <span class="text-emerald-500">Pro</span></h1>
+                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Vitrine de Produtos & Links</p>
                     </div>
                 </div>
 
-                <!-- Navigation Tabs & Theme Toggle -->
+                <!-- Controls & Desktop Navigation Switcher -->
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     
-                    <!-- Global Dark / Light Mode Toggle Button -->
-                    <button id="global-theme-toggle" onclick="toggleGlobalTheme()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95" title="Alternar Modo Claro / Escuro">
-                        <i id="theme-toggle-icon" class="fa-solid fa-moon text-base"></i>
-                        <span id="theme-toggle-text" class="hidden sm:inline text-xs font-semibold ml-2 text-slate-700 dark:text-slate-200">Dark Mode</span>
-                    </button>
-
-                    <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center text-sm font-medium border border-slate-200 dark:border-slate-700">
-                        <button id="tab-editor" onclick="switchMainTab('editor')" class="px-3 sm:px-4 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2">
+                    <!-- Desktop View Toggle Buttons (Hidden on Mobile) -->
+                    <div class="hidden md:flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl items-center text-xs font-medium border border-slate-200 dark:border-slate-700">
+                        <button id="desk-tab-editor" onclick="switchView('editor')" class="px-3 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2">
                             <i class="fa-solid fa-pen-to-square text-emerald-500"></i>
-                            <span class="hidden sm:inline">Editor & Admin</span>
+                            <span>Editor</span>
                         </button>
-                        <button id="tab-preview" onclick="switchMainTab('preview')" class="px-3 sm:px-4 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2">
+                        <button id="desk-tab-preview" onclick="switchView('preview')" class="px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2">
                             <i class="fa-solid fa-mobile-screen"></i>
-                            <span class="hidden sm:inline">Ver Vitrine</span>
+                            <span>Vitrine</span>
+                        </button>
+                        <button id="desk-tab-split" onclick="switchView('split')" class="px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-columns"></i>
+                            <span>Lado a Lado</span>
                         </button>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <button onclick="copyPublicLink()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-medium text-sm rounded-xl shadow-sm transition-all flex items-center space-x-2">
+                    <!-- Global Dark / Light Mode Toggle Button -->
+                    <button id="global-theme-toggle" onclick="toggleGlobalTheme()" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95" title="Alternar Modo Claro / Escuro">
+                        <i id="theme-toggle-icon" class="fa-solid fa-moon text-sm sm:text-base"></i>
+                        <span id="theme-toggle-text" class="hidden xl:inline text-xs font-semibold ml-2 text-slate-700 dark:text-slate-200">Dark Mode</span>
+                    </button>
+
+                    <!-- Copy Link Action Button -->
+                    <button onclick="copyPublicLink()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-medium text-xs sm:text-sm rounded-xl shadow-sm transition-all flex items-center space-x-2">
                         <i class="fa-solid fa-share-nodes"></i>
-                        <span class="hidden md:inline">Copiar Link</span>
+                        <span class="hidden sm:inline">Copiar Link</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row gap-6 overflow-hidden">
+    <!-- Main Content Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col md:flex-row gap-6 overflow-x-hidden">
         
         <!-- ========================================== -->
-        <!-- LEFT PANEL: ADMIN / EDITOR SECTION -->
+        <!-- LEFT PANEL: ADMIN / EDITOR SECTION         -->
         <!-- ========================================== -->
-        <section id="editor-section" class="flex-1 overflow-y-auto space-y-6 pr-1">
+        <section id="editor-section" class="w-full md:w-1/2 lg:w-7/12 space-y-6 transition-all">
             
             <!-- Quick Stats Bar -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500 dark:text-emerald-400 rounded-xl">
-                        <i class="fa-solid fa-eye text-xl"></i>
+            <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                <div class="bg-white dark:bg-slate-900 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center sm:space-x-4 text-center sm:text-left transition-colors">
+                    <div class="p-2.5 sm:p-3 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500 dark:text-emerald-400 rounded-xl mb-1 sm:mb-0">
+                        <i class="fa-solid fa-eye text-base sm:text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Visualizações</p>
-                        <h4 id="stat-views" class="text-xl font-bold dark:text-slate-100">0</h4>
+                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Visitas</p>
+                        <h4 id="stat-views" class="text-base sm:text-xl font-bold dark:text-slate-100">0</h4>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-                    <div class="p-3 bg-blue-50 dark:bg-blue-950/60 text-blue-500 dark:text-blue-400 rounded-xl">
-                        <i class="fa-solid fa-arrow-pointer text-xl"></i>
+
+                <div class="bg-white dark:bg-slate-900 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center sm:space-x-4 text-center sm:text-left transition-colors">
+                    <div class="p-2.5 sm:p-3 bg-blue-50 dark:bg-blue-950/60 text-blue-500 dark:text-blue-400 rounded-xl mb-1 sm:mb-0">
+                        <i class="fa-solid fa-arrow-pointer text-base sm:text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Cliques Totais</p>
-                        <h4 id="stat-clicks" class="text-xl font-bold dark:text-slate-100">0</h4>
+                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Cliques</p>
+                        <h4 id="stat-clicks" class="text-base sm:text-xl font-bold dark:text-slate-100">0</h4>
                     </div>
                 </div>
-                <div class="col-span-2 sm:col-span-1 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-                    <div class="p-3 bg-purple-50 dark:bg-purple-950/60 text-purple-500 dark:text-purple-400 rounded-xl">
-                        <i class="fa-solid fa-box-open text-xl"></i>
+
+                <div class="bg-white dark:bg-slate-900 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center sm:space-x-4 text-center sm:text-left transition-colors">
+                    <div class="p-2.5 sm:p-3 bg-purple-50 dark:bg-purple-950/60 text-purple-500 dark:text-purple-400 rounded-xl mb-1 sm:mb-0">
+                        <i class="fa-solid fa-box-open text-base sm:text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Produtos</p>
-                        <h4 id="stat-products" class="text-xl font-bold dark:text-slate-100">0</h4>
+                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Produtos</p>
+                        <h4 id="stat-products" class="text-base sm:text-xl font-bold dark:text-slate-100">0</h4>
                     </div>
                 </div>
             </div>
 
             <!-- Profile Settings Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4 transition-colors">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <h3 class="font-bold text-base flex items-center gap-2 dark:text-slate-100">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
                         <i class="fa-solid fa-user-gear text-emerald-500"></i>
                         Perfil do Criador
                     </h3>
-                    <span class="text-xs text-slate-400">Edite suas informações</span>
+                    <span class="text-[10px] sm:text-xs text-slate-400">Edição instantânea</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nome do Criador/Loja</label>
-                        <input type="text" id="input-name" placeholder="Ex: Ana Silva Afiliada" oninput="updateProfile()" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
+                        <input type="text" id="input-name" placeholder="Ex: Ana Silva Afiliada" oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Foto de Perfil (URL)</label>
-                        <input type="text" id="input-avatar" placeholder="https://..." oninput="updateProfile()" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
+                        <input type="text" id="input-avatar" placeholder="https://..." oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Biografia Curta</label>
-                        <textarea id="input-bio" rows="2" placeholder="Ex: Encontre os melhores achadinhos e cupons exclusivos da Shopee e Amazon!" oninput="updateProfile()" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition resize-none dark:text-slate-100"></textarea>
+                        <textarea id="input-bio" rows="2" placeholder="Ex: Dicas diárias com os melhores cupons da Shopee e Amazon!" oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition resize-none dark:text-slate-100"></textarea>
                     </div>
                 </div>
 
                 <!-- Redes Sociais -->
-                <div class="pt-2">
-                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Redes Sociais (URLs)</label>
+                <div class="pt-1">
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Redes Sociais</label>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div class="relative">
-                            <i class="fa-brands fa-instagram absolute left-3 top-2.5 text-pink-500"></i>
-                            <input type="text" id="input-social-instagram" placeholder="Instagram URL" oninput="updateProfile()" class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <i class="fa-brands fa-instagram absolute left-3 top-2.5 text-pink-500 text-xs"></i>
+                            <input type="text" id="input-social-instagram" placeholder="Instagram URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div class="relative">
-                            <i class="fa-brands fa-tiktok absolute left-3 top-2.5 text-slate-900 dark:text-slate-100"></i>
-                            <input type="text" id="input-social-tiktok" placeholder="TikTok URL" oninput="updateProfile()" class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <i class="fa-brands fa-tiktok absolute left-3 top-2.5 text-slate-900 dark:text-slate-100 text-xs"></i>
+                            <input type="text" id="input-social-tiktok" placeholder="TikTok URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div class="relative">
-                            <i class="fa-brands fa-whatsapp absolute left-3 top-2.5 text-emerald-500"></i>
-                            <input type="text" id="input-social-whatsapp" placeholder="WhatsApp / Grupo" oninput="updateProfile()" class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <i class="fa-brands fa-whatsapp absolute left-3 top-2.5 text-emerald-500 text-xs"></i>
+                            <input type="text" id="input-social-whatsapp" placeholder="WhatsApp URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Customization & Palette Select for Vitrine -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3 transition-colors">
-                <h3 class="font-bold text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3 dark:text-slate-100">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-3 transition-colors">
+                <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3 dark:text-slate-100">
                     <i class="fa-solid fa-palette text-emerald-500"></i>
-                    Paleta de Destaque da Vitrine
+                    Estilo e Paleta do Celular
                 </h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">Escolha o estilo de cores para a vitrine no smartphone:</p>
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                    <button onclick="setPreviewTheme('preview-theme-emerald')" class="preview-theme-btn border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-950 p-3 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
-                        <div class="w-6 h-6 rounded-full bg-emerald-500 border border-white dark:border-slate-700"></div>
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Emerald</span>
+                <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
+                    <button onclick="setPreviewTheme('preview-theme-emerald')" class="preview-theme-btn border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500 border border-white dark:border-slate-700"></div>
+                        <span class="text-[11px] font-semibold text-slate-800 dark:text-slate-200">Emerald</span>
                     </button>
-                    <button onclick="setPreviewTheme('preview-theme-purple')" class="preview-theme-btn border-2 border-transparent bg-purple-50 dark:bg-purple-950 p-3 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
-                        <div class="w-6 h-6 rounded-full bg-purple-500 border border-white dark:border-slate-700"></div>
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Purple</span>
+                    <button onclick="setPreviewTheme('preview-theme-purple')" class="preview-theme-btn border-2 border-transparent bg-purple-50 dark:bg-purple-950/40 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
+                        <div class="w-5 h-5 rounded-full bg-purple-500 border border-white dark:border-slate-700"></div>
+                        <span class="text-[11px] font-semibold text-slate-800 dark:text-slate-200">Purple</span>
                     </button>
-                    <button onclick="setPreviewTheme('preview-theme-sunset')" class="preview-theme-btn border-2 border-transparent bg-amber-50 dark:bg-amber-950 p-3 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
-                        <div class="w-6 h-6 rounded-full bg-orange-500 border border-white dark:border-slate-700"></div>
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Sunset</span>
+                    <button onclick="setPreviewTheme('preview-theme-sunset')" class="preview-theme-btn border-2 border-transparent bg-amber-50 dark:bg-amber-950/40 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
+                        <div class="w-5 h-5 rounded-full bg-orange-500 border border-white dark:border-slate-700"></div>
+                        <span class="text-[11px] font-semibold text-slate-800 dark:text-slate-200">Sunset</span>
                     </button>
-                    <button onclick="setPreviewTheme('preview-theme-cyberpunk')" class="preview-theme-btn border-2 border-transparent bg-slate-900 p-3 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
-                        <div class="w-6 h-6 rounded-full bg-pink-500 border border-white dark:border-slate-700"></div>
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Cyberpunk</span>
+                    <button onclick="setPreviewTheme('preview-theme-cyberpunk')" class="preview-theme-btn border-2 border-transparent bg-slate-900 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
+                        <div class="w-5 h-5 rounded-full bg-pink-500 border border-white dark:border-slate-700"></div>
+                        <span class="text-[11px] font-semibold text-slate-800 dark:text-slate-200">Cyberpunk</span>
                     </button>
-                    <button onclick="setPreviewTheme('preview-theme-slate')" class="preview-theme-btn border-2 border-transparent bg-slate-100 dark:bg-slate-800 p-3 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
-                        <div class="w-6 h-6 rounded-full bg-slate-500 border border-white dark:border-slate-700"></div>
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Minimalist</span>
+                    <button onclick="setPreviewTheme('preview-theme-slate')" class="preview-theme-btn border-2 border-transparent bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
+                        <div class="w-5 h-5 rounded-full bg-slate-500 border border-white dark:border-slate-700"></div>
+                        <span class="text-[11px] font-semibold text-slate-800 dark:text-slate-200">Minimal</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Add/Edit Product Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4 transition-colors">
+            <!-- Product Form Card (Desktop View / Fallback) -->
+            <div id="desktop-product-form-card" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <h3 id="form-product-title" class="font-bold text-base flex items-center gap-2 dark:text-slate-100">
+                    <h3 id="form-product-title" class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
                         <i class="fa-solid fa-cart-plus text-emerald-500"></i>
                         Adicionar Novo Produto / Banner
                     </h3>
                     <button id="cancel-edit-btn" onclick="resetProductForm()" class="hidden text-xs text-rose-500 hover:underline">Cancelar Edição</button>
                 </div>
 
-                <form id="product-form" onsubmit="saveProduct(event)" class="space-y-4">
+                <form id="product-form" onsubmit="saveProduct(event)" class="space-y-3 sm:space-y-4">
                     <input type="hidden" id="prod-id">
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Título do Produto / Banner *</label>
-                            <input type="text" id="prod-title" required placeholder="Ex: Fone Bluetooth Sem Fio" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Título do Produto *</label>
+                            <input type="text" id="prod-title" required placeholder="Ex: Fone Bluetooth Sem Fio" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Categoria *</label>
-                            <input type="text" id="prod-category" required placeholder="Ex: Eletrônicos, Moda, Oferta" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100" list="categories-list">
+                            <input type="text" id="prod-category" required placeholder="Ex: Eletrônicos, Moda, Oferta" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100" list="categories-list">
                             <datalist id="categories-list">
                                 <option value="Promoções do Dia">
                                 <option value="Eletrônicos">
@@ -287,78 +306,80 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Preço R$ (Opcional)</label>
-                            <input type="text" id="prod-price" placeholder="Ex: 89,90 ou Grátis" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="text" id="prod-price" placeholder="Ex: 89,90" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Imagem URL (Opcional)</label>
-                            <input type="text" id="prod-image" placeholder="https://..." class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="text" id="prod-image" placeholder="https://..." class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Link de Afiliado / Destino (URL) *</label>
-                            <input type="url" id="prod-link" required placeholder="https://shopee.com.br/..." class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="url" id="prod-link" required placeholder="https://shopee.com.br/..." class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-3 pt-2">
+                    <div class="flex items-center space-x-3 pt-1">
                         <label class="flex items-center space-x-2 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
                             <input type="checkbox" id="prod-featured" class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-400">
-                            <span>Destacar Produto (Badge de 'Destaque')</span>
+                            <span>Destacar Produto (Badge 'Destaque')</span>
                         </label>
                     </div>
 
-                    <button type="submit" id="save-btn" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                    <button type="submit" id="save-btn" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
                         <i class="fa-solid fa-plus"></i>
                         <span id="save-btn-text">Adicionar à Vitrine</span>
                     </button>
                 </form>
             </div>
 
-            <!-- Product List in Editor -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4 transition-colors">
+            <!-- Product List Manager -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <h3 class="font-bold text-base flex items-center gap-2 dark:text-slate-100">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
                         <i class="fa-solid fa-list-check text-emerald-500"></i>
-                        Seus Links & Produtos
+                        Gerenciar Links & Produtos
                     </h3>
-                    <button onclick="clearAllData()" class="text-xs text-slate-400 hover:text-rose-500 transition">Resetar Tudo</button>
+                    <button onclick="clearAllData()" class="text-xs text-slate-400 hover:text-rose-500 transition">Resetar Dados</button>
                 </div>
 
-                <div id="admin-product-list" class="space-y-3">
-                    <!-- Dynamic List of products for admin control -->
+                <div id="admin-product-list" class="space-y-2.5">
+                    <!-- Dynamic Product List -->
                 </div>
             </div>
 
         </section>
 
         <!-- ========================================== -->
-        <!-- RIGHT PANEL: MOBILE PREVIEW CONTAINER -->
+        <!-- RIGHT PANEL: MOBILE PREVIEW CONTAINER      -->
         <!-- ========================================== -->
-        <section id="preview-section" class="flex-1 flex justify-center items-start overflow-y-auto hidden md:flex">
-            <div class="sticky top-20 w-full max-w-[380px]">
+        <section id="preview-section" class="w-full md:w-1/2 lg:w-5/12 flex justify-center items-start transition-all">
+            <div class="md:sticky md:top-20 w-full max-w-[380px] mx-auto">
+                
                 <!-- Phone Mockup Frame -->
-                <div class="device-frame bg-slate-900 dark:bg-slate-950 border-[8px] border-slate-800 dark:border-slate-800 rounded-[40px] p-3 shadow-2xl relative transition-colors">
-                    <!-- Camera Punch Hole -->
-                    <div class="absolute top-5 left-1/2 -translate-x-1/2 w-20 h-4 bg-slate-900 dark:bg-slate-950 rounded-full z-20 flex items-center justify-center">
-                        <div class="w-3 h-3 bg-slate-800 rounded-full mr-2"></div>
-                        <div class="w-2 h-2 bg-blue-900/40 rounded-full"></div>
+                <div class="device-shadow bg-slate-900 dark:bg-slate-950 border-[6px] sm:border-[8px] border-slate-800 dark:border-slate-800 rounded-[36px] sm:rounded-[42px] p-2 sm:p-3 relative transition-colors">
+                    
+                    <!-- Camera Punch Hole / Notch -->
+                    <div class="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-3.5 bg-slate-900 dark:bg-slate-950 rounded-full z-20 flex items-center justify-center">
+                        <div class="w-2.5 h-2.5 bg-slate-800 rounded-full mr-2"></div>
+                        <div class="w-1.5 h-1.5 bg-blue-900/40 rounded-full"></div>
                     </div>
 
-                    <!-- Phone Screen Content Area -->
-                    <div id="mobile-screen" class="w-full h-[660px] rounded-[30px] overflow-y-auto relative p-4 transition-all duration-300 preview-theme-emerald">
+                    <!-- Phone Screen Area -->
+                    <div id="mobile-screen" class="w-full h-[580px] sm:h-[640px] rounded-[28px] sm:rounded-[32px] overflow-y-auto relative p-3.5 sm:p-4 transition-all duration-300 preview-theme-emerald">
                         
                         <!-- Profile Header Preview -->
-                        <div class="text-center pt-6 pb-4 space-y-2">
+                        <div class="text-center pt-5 pb-3 space-y-1.5">
                             <div class="relative inline-block">
-                                <img id="preview-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="w-20 h-20 rounded-full object-cover border-2 border-emerald-500 mx-auto shadow-md">
-                                <div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+                                <img id="preview-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-emerald-500 mx-auto shadow-md">
+                                <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
                             </div>
                             <div>
-                                <h2 id="preview-name" class="font-bold text-lg leading-tight">Ana Silva</h2>
-                                <p id="preview-bio" class="text-xs opacity-80 mt-1 max-w-[240px] mx-auto">Seleção diária dos melhores produtos e ofertas com descontos imperdíveis!</p>
+                                <h2 id="preview-name" class="font-bold text-base sm:text-lg leading-tight">Ana Silva</h2>
+                                <p id="preview-bio" class="text-[11px] sm:text-xs opacity-80 mt-1 max-w-[240px] mx-auto">Seleção diária dos melhores produtos com cupons!</p>
                             </div>
 
                             <!-- Social Icons -->
-                            <div class="flex items-center justify-center space-x-3 pt-2 text-base">
+                            <div class="flex items-center justify-center space-x-3 pt-1.5 text-sm sm:text-base">
                                 <a id="preview-social-instagram" href="#" target="_blank" class="hover:scale-110 transition"><i class="fa-brands fa-instagram"></i></a>
                                 <a id="preview-social-tiktok" href="#" target="_blank" class="hover:scale-110 transition"><i class="fa-brands fa-tiktok"></i></a>
                                 <a id="preview-social-whatsapp" href="#" target="_blank" class="hover:scale-110 transition"><i class="fa-brands fa-whatsapp"></i></a>
@@ -366,26 +387,26 @@
                         </div>
 
                         <!-- Search and Filter Bar -->
-                        <div class="space-y-2 mb-4">
+                        <div class="space-y-2 mb-3">
                             <div class="relative">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs opacity-50"></i>
                                 <input type="text" id="preview-search" oninput="filterProducts()" placeholder="Buscar produtos..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-black/5 dark:bg-white/10 border-0 focus:outline-none placeholder:text-current placeholder:opacity-50">
                             </div>
                             
                             <!-- Categories Chips Filter -->
-                            <div id="preview-categories" class="flex space-x-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-none">
+                            <div id="preview-categories" class="flex space-x-1.5 overflow-x-auto pb-1 text-[10px] sm:text-[11px] no-scrollbar">
                                 <!-- Dynamic category buttons -->
                             </div>
                         </div>
 
                         <!-- Products List Container in Preview -->
-                        <div id="preview-product-list" class="space-y-3 pb-8">
+                        <div id="preview-product-list" class="space-y-2.5 pb-6">
                             <!-- Dynamic Cards rendered here -->
                         </div>
 
                         <!-- Footer -->
-                        <div class="text-center pt-4 pb-2 border-t border-black/10 dark:border-white/10">
-                            <p class="text-[10px] opacity-60">Criado com LinkHub Pro</p>
+                        <div class="text-center pt-3 pb-2 border-t border-black/10 dark:border-white/10">
+                            <p class="text-[10px] opacity-60">LinkHub Pro • Vitrine Digital</p>
                         </div>
 
                     </div>
@@ -395,22 +416,37 @@
 
     </main>
 
-    <!-- Modal Notification / Alert -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <!-- Bottom Navigation Bar (Mobile Native App Style) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 z-40 px-4 py-2 flex items-center justify-around shadow-lg">
+        <button id="mob-nav-editor" onclick="switchView('editor')" class="flex flex-col items-center text-emerald-500 font-semibold text-[11px]">
+            <i class="fa-solid fa-pen-to-square text-lg mb-0.5"></i>
+            <span>Editor</span>
+        </button>
+        <button id="mob-nav-add" onclick="openMobileAddModal()" class="flex flex-col items-center -mt-5 bg-emerald-500 text-white p-3 rounded-full shadow-lg active:scale-90 transition">
+            <i class="fa-solid fa-plus text-lg"></i>
+        </button>
+        <button id="mob-nav-preview" onclick="switchView('preview')" class="flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]">
+            <i class="fa-solid fa-mobile-screen text-lg mb-0.5"></i>
+            <span>Vitrine</span>
+        </button>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs sm:text-sm">
         <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
-        <span id="toast-message" class="text-sm font-medium">Ação realizada com sucesso!</span>
+        <span id="toast-message" class="font-medium">Ação realizada com sucesso!</span>
     </div>
 
     <script>
-        // Default initial data
+        // Initial Default Data
         const defaultData = {
             profile: {
                 name: "Ana Silva | Achadinhos",
                 avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
-                bio: "✨ Dicas de moda, casa e tecnologia! Clique nos links abaixo para ver os produtos com os melhores preços.",
+                bio: "✨ Seleção diária com as melhores ofertas e cupons da Shopee e Amazon!",
                 previewTheme: "preview-theme-emerald",
-                views: 1420,
-                totalClicks: 389,
+                views: 1840,
+                totalClicks: 492,
                 socials: {
                     instagram: "https://instagram.com",
                     tiktok: "https://tiktok.com",
@@ -420,33 +456,33 @@
             products: [
                 {
                     id: "1",
-                    title: "Fone de Ouvido Bluetooth Sem Fio TWS",
+                    title: "Fone Bluetooth Sem Fio TWS Premium",
                     category: "Eletrônicos",
                     price: "79,90",
                     image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300",
                     link: "https://shopee.com.br",
                     featured: true,
-                    clicks: 124
+                    clicks: 184
                 },
                 {
                     id: "2",
-                    title: "Luminária Por do Sol Sunset Lamp",
+                    title: "Luminária Por do Sol Sunset Lamp 16 Cores",
                     category: "Casa & Decoração",
                     price: "45,00",
                     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300",
                     link: "https://amazon.com.br",
                     featured: false,
-                    clicks: 87
+                    clicks: 121
                 },
                 {
                     id: "3",
-                    title: "Kit Organizador de Acrílico Maquiagem",
+                    title: "Organizador de Acrílico Giratório Maquiagem",
                     category: "Moda & Beleza",
                     price: "59,90",
                     image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300",
                     link: "https://shein.com",
                     featured: false,
-                    clicks: 65
+                    clicks: 98
                 }
             ]
         };
@@ -454,20 +490,23 @@
         // Application State
         let appData = JSON.parse(localStorage.getItem('linkhub_data')) || defaultData;
         let selectedCategory = 'Todos';
+        let currentMode = 'split'; // 'editor', 'preview', 'split'
 
-        // Global Theme State (Dark / Light)
+        // Global Dark / Light Theme State
         let isDarkMode = localStorage.getItem('linkhub_global_theme') !== 'light';
 
-        // Initialize Application
+        // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             initGlobalTheme();
             loadProfileToEditor();
             renderAdminProducts();
             renderPreview();
             updateStats();
+            handleResize();
+            window.addEventListener('resize', handleResize);
         });
 
-        // Initialize Dark/Light mode on load
+        // Initialize Theme Mode
         function initGlobalTheme() {
             const html = document.documentElement;
             if (isDarkMode) {
@@ -478,7 +517,7 @@
             updateThemeToggleButton();
         }
 
-        // Toggle Global Theme Mode (Dark <-> Light)
+        // Toggle Theme (Dark <-> Light)
         function toggleGlobalTheme() {
             isDarkMode = !isDarkMode;
             const html = document.documentElement;
@@ -495,21 +534,99 @@
             showToast(`Modo ${isDarkMode ? 'Escuro' : 'Claro'} ativado!`);
         }
 
-        // Update Toggle Button Visual
+        // Toggle Button Visual Update
         function updateThemeToggleButton() {
             const icon = document.getElementById('theme-toggle-icon');
             const text = document.getElementById('theme-toggle-text');
 
             if (isDarkMode) {
-                icon.className = "fa-solid fa-sun text-amber-400 text-base";
-                text.innerText = "Modo Claro";
+                icon.className = "fa-solid fa-sun text-amber-400 text-xs sm:text-base";
+                if (text) text.innerText = "Modo Claro";
             } else {
-                icon.className = "fa-solid fa-moon text-slate-600 text-base";
-                text.innerText = "Modo Escuro";
+                icon.className = "fa-solid fa-moon text-slate-600 text-xs sm:text-base";
+                if (text) text.innerText = "Modo Escuro";
             }
         }
 
-        // Save State to LocalStorage
+        // View Mode Switcher (Responsive Layout Control)
+        function switchView(mode) {
+            currentMode = mode;
+            const editorSec = document.getElementById('editor-section');
+            const previewSec = document.getElementById('preview-section');
+            const isMobile = window.innerWidth < 768;
+
+            if (isMobile) {
+                // Mobile behavior: toggle visibility completely
+                if (mode === 'preview') {
+                    editorSec.classList.add('hidden');
+                    previewSec.classList.remove('hidden');
+                    updateNavButtons('preview');
+                } else {
+                    editorSec.classList.remove('hidden');
+                    previewSec.classList.add('hidden');
+                    updateNavButtons('editor');
+                }
+            } else {
+                // Desktop behavior
+                editorSec.classList.remove('hidden');
+                previewSec.classList.remove('hidden');
+
+                if (mode === 'editor') {
+                    editorSec.className = "w-full transition-all space-y-6";
+                    previewSec.className = "hidden transition-all";
+                } else if (mode === 'preview') {
+                    editorSec.className = "hidden transition-all space-y-6";
+                    previewSec.className = "w-full flex justify-center transition-all";
+                } else {
+                    // Split view (50/50 or 60/40)
+                    editorSec.className = "w-full md:w-1/2 lg:w-7/12 space-y-6 transition-all";
+                    previewSec.className = "w-full md:w-1/2 lg:w-5/12 flex justify-center items-start transition-all";
+                }
+                updateDesktopNavButtons(mode);
+            }
+        }
+
+        function updateNavButtons(active) {
+            const mobEditor = document.getElementById('mob-nav-editor');
+            const mobPreview = document.getElementById('mob-nav-preview');
+
+            if (active === 'preview') {
+                mobPreview.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
+                mobEditor.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
+            } else {
+                mobEditor.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
+                mobPreview.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
+            }
+        }
+
+        function updateDesktopNavButtons(active) {
+            const tabs = ['editor', 'preview', 'split'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`desk-tab-${t}`);
+                if (btn) {
+                    if (t === active) {
+                        btn.className = "px-3 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2 font-semibold";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2 font-normal";
+                    }
+                }
+            });
+        }
+
+        // Handle Window Resize
+        function handleResize() {
+            if (window.innerWidth < 768) {
+                if (currentMode === 'split') {
+                    switchView('editor');
+                } else {
+                    switchView(currentMode);
+                }
+            } else {
+                switchView(currentMode);
+            }
+        }
+
+        // Save Data to LocalStorage
         function saveData() {
             localStorage.setItem('linkhub_data', JSON.stringify(appData));
             renderPreview();
@@ -517,7 +634,7 @@
             updateStats();
         }
 
-        // Show Toast Notification
+        // Toast Notification
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = msg;
@@ -527,30 +644,7 @@
             }, 2500);
         }
 
-        // Switch Tabs for Mobile View
-        function switchMainTab(tab) {
-            const editorSection = document.getElementById('editor-section');
-            const previewSection = document.getElementById('preview-section');
-            const tabEditor = document.getElementById('tab-editor');
-            const tabPreview = document.getElementById('tab-preview');
-
-            if (tab === 'editor') {
-                editorSection.classList.remove('hidden');
-                previewSection.classList.add('hidden', 'md:flex');
-                
-                tabEditor.className = "px-3 sm:px-4 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2";
-                tabPreview.className = "px-3 sm:px-4 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2";
-            } else {
-                editorSection.classList.add('hidden');
-                previewSection.classList.remove('hidden');
-                previewSection.classList.add('flex');
-
-                tabPreview.className = "px-3 sm:px-4 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2";
-                tabEditor.className = "px-3 sm:px-4 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2";
-            }
-        }
-
-        // Populate Editor Profile Fields
+        // Load Profile Info to Form
         function loadProfileToEditor() {
             document.getElementById('input-name').value = appData.profile.name || '';
             document.getElementById('input-avatar').value = appData.profile.avatar || '';
@@ -560,7 +654,7 @@
             document.getElementById('input-social-whatsapp').value = appData.profile.socials.whatsapp || '';
         }
 
-        // Update Profile Info in State
+        // Update Profile in State
         function updateProfile() {
             appData.profile.name = document.getElementById('input-name').value;
             appData.profile.avatar = document.getElementById('input-avatar').value || 'https://placehold.co/150x150/22c55e/white?text=Foto';
@@ -571,7 +665,7 @@
             saveData();
         }
 
-        // Set Preview Theme Palette
+        // Theme Palette Selection
         function setPreviewTheme(themeName) {
             appData.profile.previewTheme = themeName;
             
@@ -579,14 +673,24 @@
                 btn.classList.remove('border-emerald-500');
                 btn.classList.add('border-transparent');
             });
-            event.currentTarget.classList.add('border-emerald-500');
-            event.currentTarget.classList.remove('border-transparent');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('border-emerald-500');
+                event.currentTarget.classList.remove('border-transparent');
+            }
 
             saveData();
             showToast('Estilo da vitrine atualizado!');
         }
 
-        // Save or Update Product
+        // Open Add Modal in Mobile
+        function openMobileAddModal() {
+            switchView('editor');
+            resetProductForm();
+            const formCard = document.getElementById('desktop-product-form-card');
+            formCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Save Product Function
         function saveProduct(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value;
@@ -598,14 +702,12 @@
             const featured = document.getElementById('prod-featured').checked;
 
             if (id) {
-                // Update existing
                 const index = appData.products.findIndex(p => p.id === id);
                 if (index !== -1) {
                     appData.products[index] = { ...appData.products[index], title, category, price, image, link, featured };
                     showToast('Produto atualizado!');
                 }
             } else {
-                // Create new
                 const newProduct = {
                     id: Date.now().toString(),
                     title,
@@ -640,9 +742,12 @@
             document.getElementById('form-product-title').innerHTML = `<i class="fa-solid fa-pen text-emerald-500"></i> Editar Produto`;
             document.getElementById('save-btn-text').innerText = 'Salvar Alterações';
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
+
+            const formCard = document.getElementById('desktop-product-form-card');
+            formCard.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Reset Form
+        // Reset Product Form
         function resetProductForm() {
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
@@ -658,50 +763,47 @@
             showToast('Produto removido');
         }
 
-        // Render Admin Product List
+        // Render Product List in Admin
         function renderAdminProducts() {
             const container = document.getElementById('admin-product-list');
             if (appData.products.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-6 text-slate-400 text-xs">
                         <i class="fa-solid fa-box text-2xl mb-1 block"></i>
-                        Nenhum produto cadastrado ainda.
+                        Nenhum produto cadastrado.
                     </div>`;
                 return;
             }
 
             container.innerHTML = appData.products.map(p => `
-                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors">
+                <div class="flex items-center justify-between p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors">
                     <div class="flex items-center space-x-3 overflow-hidden">
-                        <img src="${p.image}" onerror="this.src='https://placehold.co/100'" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
+                        <img src="${p.image}" onerror="this.src='https://placehold.co/100'" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover flex-shrink-0">
                         <div class="truncate">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center space-x-1.5">
                                 <h4 class="font-semibold text-xs text-slate-800 dark:text-slate-100 truncate">${p.title}</h4>
-                                ${p.featured ? '<span class="bg-amber-100 text-amber-700 text-[10px] px-1.5 py-0.5 rounded font-bold">Destaque</span>' : ''}
+                                ${p.featured ? '<span class="bg-amber-100 text-amber-700 text-[9px] px-1 py-0.2 rounded font-bold">Destaque</span>' : ''}
                             </div>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
-                                <span class="text-emerald-500 font-medium">${p.price ? 'R$ ' + p.price : 'Link'}</span> • 
-                                Categoria: ${p.category}
+                            <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
+                                <span class="text-emerald-500 font-medium">${p.price ? 'R$ ' + p.price : 'Link'}</span> • ${p.category}
                             </p>
-                            <span class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-pointer"></i> ${p.clicks || 0} cliques</span>
+                            <span class="text-[9px] text-slate-400"><i class="fa-solid fa-arrow-pointer"></i> ${p.clicks || 0} cliques</span>
                         </div>
                     </div>
                     <div class="flex items-center space-x-1 pl-2">
-                        <button onclick="editProduct('${p.id}')" class="p-2 text-slate-400 hover:text-emerald-500 transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteProduct('${p.id}')" class="p-2 text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editProduct('${p.id}')" class="p-1.5 text-slate-400 hover:text-emerald-500 transition"><i class="fa-solid fa-pen text-xs sm:text-sm"></i></button>
+                        <button onclick="deleteProduct('${p.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs sm:text-sm"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Render Mobile Preview View
+        // Render Mobile Preview
         function renderPreview() {
-            // Update Profile Elements
             document.getElementById('preview-name').innerText = appData.profile.name || 'Seu Nome';
             document.getElementById('preview-avatar').src = appData.profile.avatar || 'https://placehold.co/150';
             document.getElementById('preview-bio').innerText = appData.profile.bio || '';
 
-            // Update Social Icons Visibility
             const insta = document.getElementById('preview-social-instagram');
             const tiktok = document.getElementById('preview-social-tiktok');
             const whatsapp = document.getElementById('preview-social-whatsapp');
@@ -715,14 +817,11 @@
             whatsapp.style.display = appData.profile.socials.whatsapp ? 'inline-block' : 'none';
             whatsapp.href = appData.profile.socials.whatsapp || '#';
 
-            // Apply Theme Palette to Preview
             const screen = document.getElementById('mobile-screen');
-            screen.className = `w-full h-[660px] rounded-[30px] overflow-y-auto relative p-4 transition-all duration-300 ${appData.profile.previewTheme || 'preview-theme-emerald'}`;
+            screen.className = `w-full h-[580px] sm:h-[640px] rounded-[28px] sm:rounded-[32px] overflow-y-auto relative p-3.5 sm:p-4 transition-all duration-300 ${appData.profile.previewTheme || 'preview-theme-emerald'}`;
 
-            // Render Categories Chips
             renderCategoriesFilter();
 
-            // Filter Products
             const searchQuery = (document.getElementById('preview-search')?.value || '').toLowerCase();
             let filtered = appData.products.filter(p => {
                 const matchesCategory = selectedCategory === 'Todos' || p.category === selectedCategory;
@@ -730,7 +829,6 @@
                 return matchesCategory && matchesSearch;
             });
 
-            // Render Product Cards
             const container = document.getElementById('preview-product-list');
             if (filtered.length === 0) {
                 container.innerHTML = `<p class="text-center text-xs opacity-60 py-8">Nenhum produto encontrado.</p>`;
@@ -738,28 +836,28 @@
             }
 
             container.innerHTML = filtered.map(p => `
-                <div class="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl p-3 shadow-sm border border-black/5 dark:border-white/10 flex items-center gap-3 transition hover:scale-[1.02]">
-                    ${p.featured ? '<span class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">Destaque</span>' : ''}
-                    <img src="${p.image}" onerror="this.src='https://placehold.co/100'" class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
+                <div class="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 shadow-sm border border-black/5 dark:border-white/10 flex items-center gap-2.5 sm:gap-3 transition hover:scale-[1.01]">
+                    ${p.featured ? '<span class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow">Destaque</span>' : ''}
+                    <img src="${p.image}" onerror="this.src='https://placehold.co/100'" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover flex-shrink-0">
                     <div class="flex-1 min-w-0">
-                        <span class="text-[9px] font-semibold tracking-wider text-emerald-500 uppercase">${p.category}</span>
+                        <span class="text-[8px] sm:text-[9px] font-semibold tracking-wider text-emerald-500 uppercase">${p.category}</span>
                         <h3 class="font-bold text-xs leading-snug truncate text-slate-800 dark:text-slate-100">${p.title}</h3>
                         ${p.price ? `<p class="text-xs font-black text-emerald-600 dark:text-emerald-400 mt-0.5">R$ ${p.price}</p>` : ''}
                     </div>
-                    <a href="${p.link}" target="_blank" onclick="registerClick('${p.id}')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm flex items-center justify-center flex-shrink-0 transition active:scale-95">
+                    <a href="${p.link}" target="_blank" onclick="registerClick('${p.id}')" class="px-2.5 sm:px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm flex items-center justify-center flex-shrink-0 transition active:scale-95">
                         Ver
                     </a>
                 </div>
             `).join('');
         }
 
-        // Render Categories Filters Chips
+        // Render Categories Chips
         function renderCategoriesFilter() {
             const categories = ['Todos', ...new Set(appData.products.map(p => p.category))];
             const container = document.getElementById('preview-categories');
 
             container.innerHTML = categories.map(cat => `
-                <button onclick="setCategoryFilter('${cat}')" class="px-3 py-1 rounded-full whitespace-nowrap transition text-xs font-medium ${selectedCategory === cat ? 'bg-emerald-500 text-white shadow-sm' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}">
+                <button onclick="setCategoryFilter('${cat}')" class="px-2.5 py-1 rounded-full whitespace-nowrap transition text-[10px] font-medium ${selectedCategory === cat ? 'bg-emerald-500 text-white shadow-sm' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}">
                     ${cat}
                 </button>
             `).join('');
@@ -774,7 +872,7 @@
             renderPreview();
         }
 
-        // Track Click Events
+        // Register Product Link Clicks
         function registerClick(productId) {
             appData.profile.totalClicks = (appData.profile.totalClicks || 0) + 1;
             const prod = appData.products.find(p => p.id === productId);
@@ -784,14 +882,14 @@
             saveData();
         }
 
-        // Update Stats Counters
+        // Update Dashboard Stats
         function updateStats() {
             document.getElementById('stat-views').innerText = appData.profile.views || 0;
             document.getElementById('stat-clicks').innerText = appData.profile.totalClicks || 0;
             document.getElementById('stat-products').innerText = appData.products.length || 0;
         }
 
-        // Copy Shareable Link Simulation
+        // Copy Public URL
         function copyPublicLink() {
             const dummyLink = window.location.href;
             const el = document.createElement('textarea');
@@ -803,13 +901,13 @@
             showToast('Link da sua vitrine copiado!');
         }
 
-        // Reset Data to Default
+        // Clear All Saved Data
         function clearAllData() {
             if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
                 appData = JSON.parse(JSON.stringify(defaultData));
                 saveData();
                 loadProfileToEditor();
-                showToast('Dados restaurados!');
+                showToast('Dados restaurados com sucesso!');
             }
         }
     </script>
