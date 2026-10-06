@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LinkHub Pro - Vitrine & Bio Link Responsivo</title>
+    <title>LinkHub Pro - Vitrine & Bio Link com Firebase Firestore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,6 @@
         }
     </script>
     <style>
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -46,7 +45,7 @@
             border-radius: 999px;
         }
 
-        /* Themes for Mobile Preview */
+        /* Temas Dinâmicos para o Smartphone */
         .preview-theme-emerald {
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             color: #065f46;
@@ -96,7 +95,6 @@
             box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Prevent scrollbar hide issue on categories */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -108,7 +106,6 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-full antialiased flex flex-col transition-colors duration-300 pb-16 md:pb-0">
 
-    <!-- Top Navigation Header -->
     <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -120,14 +117,17 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-base sm:text-lg leading-none tracking-tight">LinkHub <span class="text-emerald-500">Pro</span></h1>
-                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Vitrine de Produtos & Links</p>
+                        <p id="cloud-status" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="status-indicator"></span>
+                            <span id="status-text">Conectando ao Firebase...</span>
+                        </p>
                     </div>
                 </div>
 
                 <!-- Controls & Desktop Navigation Switcher -->
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     
-                    <!-- Desktop View Toggle Buttons (Hidden on Mobile) -->
+                    <!-- View Toggle Buttons (Desktop) -->
                     <div class="hidden md:flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl items-center text-xs font-medium border border-slate-200 dark:border-slate-700">
                         <button id="desk-tab-editor" onclick="switchView('editor')" class="px-3 py-1.5 rounded-lg text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700 shadow-sm transition-all flex items-center space-x-2">
                             <i class="fa-solid fa-pen-to-square text-emerald-500"></i>
@@ -143,13 +143,13 @@
                         </button>
                     </div>
 
-                    <!-- Global Dark / Light Mode Toggle Button -->
+                    <!-- Toggle Modo Claro / Escuro -->
                     <button id="global-theme-toggle" onclick="toggleGlobalTheme()" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95" title="Alternar Modo Claro / Escuro">
                         <i id="theme-toggle-icon" class="fa-solid fa-moon text-sm sm:text-base"></i>
                         <span id="theme-toggle-text" class="hidden xl:inline text-xs font-semibold ml-2 text-slate-700 dark:text-slate-200">Dark Mode</span>
                     </button>
 
-                    <!-- Copy Link Action Button -->
+                    <!-- Botão Copiar Link -->
                     <button onclick="copyPublicLink()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-medium text-xs sm:text-sm rounded-xl shadow-sm transition-all flex items-center space-x-2">
                         <i class="fa-solid fa-share-nodes"></i>
                         <span class="hidden sm:inline">Copiar Link</span>
@@ -159,15 +159,12 @@
         </div>
     </header>
 
-    <!-- Main Content Grid -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col md:flex-row gap-6 overflow-x-hidden">
         
-        <!-- ========================================== -->
-        <!-- LEFT PANEL: ADMIN / EDITOR SECTION         -->
-        <!-- ========================================== -->
+        <!-- LEFT PANEL: ADMIN / EDITOR -->
         <section id="editor-section" class="w-full md:w-1/2 lg:w-7/12 space-y-6 transition-all">
             
-            <!-- Quick Stats Bar -->
+            <!-- Cards de Métricas -->
             <div class="grid grid-cols-3 gap-2 sm:gap-4">
                 <div class="bg-white dark:bg-slate-900 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center sm:space-x-4 text-center sm:text-left transition-colors">
                     <div class="p-2.5 sm:p-3 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500 dark:text-emerald-400 rounded-xl mb-1 sm:mb-0">
@@ -200,28 +197,28 @@
                 </div>
             </div>
 
-            <!-- Profile Settings Card -->
+            <!-- Perfil do Criador -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
                         <i class="fa-solid fa-user-gear text-emerald-500"></i>
-                        Perfil do Criador
+                        Perfil do Criador (Sincronizado na Nuvem)
                     </h3>
-                    <span class="text-[10px] sm:text-xs text-slate-400">Edição instantânea</span>
+                    <span class="text-[10px] sm:text-xs text-slate-400">Auto-salvamento</span>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nome do Criador/Loja</label>
-                        <input type="text" id="input-name" placeholder="Ex: Ana Silva Afiliada" oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
+                        <input type="text" id="input-name" placeholder="Ex: Ana Silva Afiliada" oninput="queueProfileSave()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Foto de Perfil (URL)</label>
-                        <input type="text" id="input-avatar" placeholder="https://..." oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
+                        <input type="text" id="input-avatar" placeholder="https://..." oninput="queueProfileSave()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition dark:text-slate-100">
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Biografia Curta</label>
-                        <textarea id="input-bio" rows="2" placeholder="Ex: Dicas diárias com os melhores cupons da Shopee e Amazon!" oninput="updateProfile()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition resize-none dark:text-slate-100"></textarea>
+                        <textarea id="input-bio" rows="2" placeholder="Ex: Dicas diárias com os melhores cupons da Shopee e Amazon!" oninput="queueProfileSave()" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition resize-none dark:text-slate-100"></textarea>
                     </div>
                 </div>
 
@@ -231,25 +228,25 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div class="relative">
                             <i class="fa-brands fa-instagram absolute left-3 top-2.5 text-pink-500 text-xs"></i>
-                            <input type="text" id="input-social-instagram" placeholder="Instagram URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="text" id="input-social-instagram" placeholder="Instagram URL" oninput="queueProfileSave()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div class="relative">
                             <i class="fa-brands fa-tiktok absolute left-3 top-2.5 text-slate-900 dark:text-slate-100 text-xs"></i>
-                            <input type="text" id="input-social-tiktok" placeholder="TikTok URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="text" id="input-social-tiktok" placeholder="TikTok URL" oninput="queueProfileSave()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                         <div class="relative">
                             <i class="fa-brands fa-whatsapp absolute left-3 top-2.5 text-emerald-500 text-xs"></i>
-                            <input type="text" id="input-social-whatsapp" placeholder="WhatsApp URL" oninput="updateProfile()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
+                            <input type="text" id="input-social-whatsapp" placeholder="WhatsApp URL" oninput="queueProfileSave()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:text-slate-100">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Customization & Palette Select for Vitrine -->
+            <!-- Paleta e Tema da Vitrine -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-3 transition-colors">
                 <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3 dark:text-slate-100">
                     <i class="fa-solid fa-palette text-emerald-500"></i>
-                    Estilo e Paleta do Celular
+                    Paleta Visual da Vitrine
                 </h3>
                 <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
                     <button onclick="setPreviewTheme('preview-theme-emerald')" class="preview-theme-btn border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 p-2.5 rounded-xl flex flex-col items-center gap-1 hover:opacity-90 transition">
@@ -275,7 +272,7 @@
                 </div>
             </div>
 
-            <!-- Product Form Card (Desktop View / Fallback) -->
+            <!-- Form de Cadastro / Edição de Produto -->
             <div id="desktop-product-form-card" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 id="form-product-title" class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
@@ -285,7 +282,7 @@
                     <button id="cancel-edit-btn" onclick="resetProductForm()" class="hidden text-xs text-rose-500 hover:underline">Cancelar Edição</button>
                 </div>
 
-                <form id="product-form" onsubmit="saveProduct(event)" class="space-y-3 sm:space-y-4">
+                <form id="product-form" onsubmit="saveProductForm(event)" class="space-y-3 sm:space-y-4">
                     <input type="hidden" id="prod-id">
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -327,47 +324,48 @@
 
                     <button type="submit" id="save-btn" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
                         <i class="fa-solid fa-plus"></i>
-                        <span id="save-btn-text">Adicionar à Vitrine</span>
+                        <span id="save-btn-text">Salvar no Firestore</span>
                     </button>
                 </form>
             </div>
 
-            <!-- Product List Manager -->
+            <!-- Gerenciador de Produtos -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-4 transition-colors">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 dark:text-slate-100">
                         <i class="fa-solid fa-list-check text-emerald-500"></i>
                         Gerenciar Links & Produtos
                     </h3>
-                    <button onclick="clearAllData()" class="text-xs text-slate-400 hover:text-rose-500 transition">Resetar Dados</button>
+                    <span id="product-count-badge" class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full font-medium">0 itens</span>
                 </div>
 
                 <div id="admin-product-list" class="space-y-2.5">
-                    <!-- Dynamic Product List -->
+                    <div class="text-center py-6 text-slate-400 text-xs">
+                        <i class="fa-solid fa-spinner fa-spin text-2xl mb-1 block text-emerald-500"></i>
+                        Carregando itens do Firebase...
+                    </div>
                 </div>
             </div>
 
         </section>
 
-        <!-- ========================================== -->
-        <!-- RIGHT PANEL: MOBILE PREVIEW CONTAINER      -->
-        <!-- ========================================== -->
+        <!-- RIGHT PANEL: PREVIEW MOCKUP -->
         <section id="preview-section" class="w-full md:w-1/2 lg:w-5/12 flex justify-center items-start transition-all">
             <div class="md:sticky md:top-20 w-full max-w-[380px] mx-auto">
                 
-                <!-- Phone Mockup Frame -->
+                <!-- Phone Frame -->
                 <div class="device-shadow bg-slate-900 dark:bg-slate-950 border-[6px] sm:border-[8px] border-slate-800 dark:border-slate-800 rounded-[36px] sm:rounded-[42px] p-2 sm:p-3 relative transition-colors">
                     
-                    <!-- Camera Punch Hole / Notch -->
+                    <!-- Camera Notch -->
                     <div class="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-3.5 bg-slate-900 dark:bg-slate-950 rounded-full z-20 flex items-center justify-center">
                         <div class="w-2.5 h-2.5 bg-slate-800 rounded-full mr-2"></div>
                         <div class="w-1.5 h-1.5 bg-blue-900/40 rounded-full"></div>
                     </div>
 
-                    <!-- Phone Screen Area -->
+                    <!-- Screen Area -->
                     <div id="mobile-screen" class="w-full h-[580px] sm:h-[640px] rounded-[28px] sm:rounded-[32px] overflow-y-auto relative p-3.5 sm:p-4 transition-all duration-300 preview-theme-emerald">
                         
-                        <!-- Profile Header Preview -->
+                        <!-- Header Preview -->
                         <div class="text-center pt-5 pb-3 space-y-1.5">
                             <div class="relative inline-block">
                                 <img id="preview-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-emerald-500 mx-auto shadow-md">
@@ -375,7 +373,7 @@
                             </div>
                             <div>
                                 <h2 id="preview-name" class="font-bold text-base sm:text-lg leading-tight">Ana Silva</h2>
-                                <p id="preview-bio" class="text-[11px] sm:text-xs opacity-80 mt-1 max-w-[240px] mx-auto">Seleção diária dos melhores produtos com cupons!</p>
+                                <p id="preview-bio" class="text-[11px] sm:text-xs opacity-80 mt-1 max-w-[240px] mx-auto">Carregando perfil...</p>
                             </div>
 
                             <!-- Social Icons -->
@@ -395,18 +393,18 @@
                             
                             <!-- Categories Chips Filter -->
                             <div id="preview-categories" class="flex space-x-1.5 overflow-x-auto pb-1 text-[10px] sm:text-[11px] no-scrollbar">
-                                <!-- Dynamic category buttons -->
+                                <!-- Dynamic categories -->
                             </div>
                         </div>
 
-                        <!-- Products List Container in Preview -->
+                        <!-- Product Cards List -->
                         <div id="preview-product-list" class="space-y-2.5 pb-6">
-                            <!-- Dynamic Cards rendered here -->
+                            <!-- Dynamic Cards -->
                         </div>
 
                         <!-- Footer -->
                         <div class="text-center pt-3 pb-2 border-t border-black/10 dark:border-white/10">
-                            <p class="text-[10px] opacity-60">LinkHub Pro • Vitrine Digital</p>
+                            <p class="text-[10px] opacity-60">LinkHub Pro • Firestore Cloud</p>
                         </div>
 
                     </div>
@@ -416,7 +414,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar (Mobile Native App Style) -->
+    <!-- Bottom Navigation Bar (Mobile Native Style) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 z-40 px-4 py-2 flex items-center justify-around shadow-lg">
         <button id="mob-nav-editor" onclick="switchView('editor')" class="flex flex-col items-center text-emerald-500 font-semibold text-[11px]">
             <i class="fa-solid fa-pen-to-square text-lg mb-0.5"></i>
@@ -434,19 +432,51 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs sm:text-sm">
         <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
-        <span id="toast-message" class="font-medium">Ação realizada com sucesso!</span>
+        <span id="toast-message" class="font-medium">Sincronizado!</span>
     </div>
 
-    <script>
-        // Initial Default Data
-        const defaultData = {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            onSnapshot, 
+            collection 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA56oeU_2zKxFkZmoyApQyPO7_0Hcn_6yg",
+            authDomain: "linkhubpro-aea1f.firebaseapp.com",
+            projectId: "linkhubpro-aea1f",
+            storageBucket: "linkhubpro-aea1f.firebasestorage.app",
+            messagingSenderId: "798668806559",
+            appId: "1:798668806559:web:ae8500f791574029bf05aa"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'linkhub-pro';
+
+        // State Variables
+        window.appState = {
             profile: {
                 name: "Ana Silva | Achadinhos",
                 avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
                 bio: "✨ Seleção diária com as melhores ofertas e cupons da Shopee e Amazon!",
                 previewTheme: "preview-theme-emerald",
-                views: 1840,
-                totalClicks: 492,
+                views: 1,
+                totalClicks: 0,
                 socials: {
                     instagram: "https://instagram.com",
                     tiktok: "https://tiktok.com",
@@ -462,7 +492,7 @@
                     image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300",
                     link: "https://shopee.com.br",
                     featured: true,
-                    clicks: 184
+                    clicks: 0
                 },
                 {
                     id: "2",
@@ -472,41 +502,110 @@
                     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300",
                     link: "https://amazon.com.br",
                     featured: false,
-                    clicks: 121
-                },
-                {
-                    id: "3",
-                    title: "Organizador de Acrílico Giratório Maquiagem",
-                    category: "Moda & Beleza",
-                    price: "59,90",
-                    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300",
-                    link: "https://shein.com",
-                    featured: false,
-                    clicks: 98
+                    clicks: 0
                 }
-            ]
+            ],
+            currentUser: null,
+            selectedCategory: 'Todos'
         };
 
-        // Application State
-        let appData = JSON.parse(localStorage.getItem('linkhub_data')) || defaultData;
-        let selectedCategory = 'Todos';
-        let currentMode = 'split'; // 'editor', 'preview', 'split'
+        // Firebase Auth Initialization
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth Exception:", err);
+                // Fallback to anonymous signin
+                await signInAnonymously(auth);
+            }
+        }
 
-        // Global Dark / Light Theme State
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                window.appState.currentUser = user;
+                updateStatusIndicator(true, "Conectado ao Cloud Firestore");
+                setupRealtimeSync(user.uid);
+            } else {
+                updateStatusIndicator(false, "Modo Offline");
+            }
+        });
+
+        // Setup Realtime Firestore Synchronization
+        function setupRealtimeSync(userId) {
+            // Path following Mandatory Rule 1
+            const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'vitrineData', 'main');
+
+            onSnapshot(userDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const cloudData = docSnap.data();
+                    if (cloudData.profile) window.appState.profile = cloudData.profile;
+                    if (cloudData.products) window.appState.products = cloudData.products;
+                } else {
+                    // Initialize empty doc with default template data
+                    syncToFirestore();
+                }
+                
+                // Update Application UI
+                window.loadProfileToEditor();
+                window.renderAdminProducts();
+                window.renderPreview();
+                window.updateStats();
+            }, (error) => {
+                console.error("Firestore Error:", error);
+                updateStatusIndicator(false, "Erro de Sincronização");
+            });
+        }
+
+        // Save State to Firestore
+        async function syncToFirestore() {
+            if (!window.appState.currentUser) return;
+            const userId = window.appState.currentUser.uid;
+            const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'vitrineData', 'main');
+
+            try {
+                await setDoc(userDocRef, {
+                    profile: window.appState.profile,
+                    products: window.appState.products,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                window.showToast("Salvo na nuvem!");
+            } catch (err) {
+                console.error("Erro ao salvar no Firestore:", err);
+            }
+        }
+
+        function updateStatusIndicator(isOnline, text) {
+            const ind = document.getElementById('status-indicator');
+            const txt = document.getElementById('status-text');
+            if (ind && txt) {
+                ind.className = isOnline ? "w-2 h-2 rounded-full bg-emerald-500" : "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+                txt.innerText = text;
+            }
+        }
+
+        // Expose functions globally for layout interactions
+        window.syncToFirestore = syncToFirestore;
+        window.initAuth = initAuth;
+
+        // Initialize Auth process
+        initAuth();
+    </script>
+
+    <script>
+        let currentMode = 'split';
         let isDarkMode = localStorage.getItem('linkhub_global_theme') !== 'light';
+        let saveProfileTimeout = null;
 
-        // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             initGlobalTheme();
-            loadProfileToEditor();
-            renderAdminProducts();
-            renderPreview();
-            updateStats();
             handleResize();
             window.addEventListener('resize', handleResize);
         });
 
-        // Initialize Theme Mode
         function initGlobalTheme() {
             const html = document.documentElement;
             if (isDarkMode) {
@@ -517,7 +616,6 @@
             updateThemeToggleButton();
         }
 
-        // Toggle Theme (Dark <-> Light)
         function toggleGlobalTheme() {
             isDarkMode = !isDarkMode;
             const html = document.documentElement;
@@ -534,21 +632,19 @@
             showToast(`Modo ${isDarkMode ? 'Escuro' : 'Claro'} ativado!`);
         }
 
-        // Toggle Button Visual Update
         function updateThemeToggleButton() {
             const icon = document.getElementById('theme-toggle-icon');
             const text = document.getElementById('theme-toggle-text');
 
             if (isDarkMode) {
-                icon.className = "fa-solid fa-sun text-amber-400 text-xs sm:text-base";
+                if (icon) icon.className = "fa-solid fa-sun text-amber-400 text-xs sm:text-base";
                 if (text) text.innerText = "Modo Claro";
             } else {
-                icon.className = "fa-solid fa-moon text-slate-600 text-xs sm:text-base";
+                if (icon) icon.className = "fa-solid fa-moon text-slate-600 text-xs sm:text-base";
                 if (text) text.innerText = "Modo Escuro";
             }
         }
 
-        // View Mode Switcher (Responsive Layout Control)
         function switchView(mode) {
             currentMode = mode;
             const editorSec = document.getElementById('editor-section');
@@ -556,7 +652,6 @@
             const isMobile = window.innerWidth < 768;
 
             if (isMobile) {
-                // Mobile behavior: toggle visibility completely
                 if (mode === 'preview') {
                     editorSec.classList.add('hidden');
                     previewSec.classList.remove('hidden');
@@ -567,7 +662,6 @@
                     updateNavButtons('editor');
                 }
             } else {
-                // Desktop behavior
                 editorSec.classList.remove('hidden');
                 previewSec.classList.remove('hidden');
 
@@ -578,7 +672,6 @@
                     editorSec.className = "hidden transition-all space-y-6";
                     previewSec.className = "w-full flex justify-center transition-all";
                 } else {
-                    // Split view (50/50 or 60/40)
                     editorSec.className = "w-full md:w-1/2 lg:w-7/12 space-y-6 transition-all";
                     previewSec.className = "w-full md:w-1/2 lg:w-5/12 flex justify-center items-start transition-all";
                 }
@@ -591,17 +684,16 @@
             const mobPreview = document.getElementById('mob-nav-preview');
 
             if (active === 'preview') {
-                mobPreview.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
-                mobEditor.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
+                if (mobPreview) mobPreview.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
+                if (mobEditor) mobEditor.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
             } else {
-                mobEditor.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
-                mobPreview.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
+                if (mobEditor) mobEditor.className = "flex flex-col items-center text-emerald-500 font-semibold text-[11px]";
+                if (mobPreview) mobPreview.className = "flex flex-col items-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-[11px]";
             }
         }
 
         function updateDesktopNavButtons(active) {
-            const tabs = ['editor', 'preview', 'split'];
-            tabs.forEach(t => {
+            ['editor', 'preview', 'split'].forEach(t => {
                 const btn = document.getElementById(`desk-tab-${t}`);
                 if (btn) {
                     if (t === active) {
@@ -613,7 +705,6 @@
             });
         }
 
-        // Handle Window Resize
         function handleResize() {
             if (window.innerWidth < 768) {
                 if (currentMode === 'split') {
@@ -626,15 +717,6 @@
             }
         }
 
-        // Save Data to LocalStorage
-        function saveData() {
-            localStorage.setItem('linkhub_data', JSON.stringify(appData));
-            renderPreview();
-            renderAdminProducts();
-            updateStats();
-        }
-
-        // Toast Notification
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = msg;
@@ -644,45 +726,45 @@
             }, 2500);
         }
 
-        // Load Profile Info to Form
         function loadProfileToEditor() {
-            document.getElementById('input-name').value = appData.profile.name || '';
-            document.getElementById('input-avatar').value = appData.profile.avatar || '';
-            document.getElementById('input-bio').value = appData.profile.bio || '';
-            document.getElementById('input-social-instagram').value = appData.profile.socials.instagram || '';
-            document.getElementById('input-social-tiktok').value = appData.profile.socials.tiktok || '';
-            document.getElementById('input-social-whatsapp').value = appData.profile.socials.whatsapp || '';
+            if (!window.appState) return;
+            const prof = window.appState.profile;
+            document.getElementById('input-name').value = prof.name || '';
+            document.getElementById('input-avatar').value = prof.avatar || '';
+            document.getElementById('input-bio').value = prof.bio || '';
+            document.getElementById('input-social-instagram').value = prof.socials?.instagram || '';
+            document.getElementById('input-social-tiktok').value = prof.socials?.tiktok || '';
+            document.getElementById('input-social-whatsapp').value = prof.socials?.whatsapp || '';
         }
 
-        // Update Profile in State
-        function updateProfile() {
-            appData.profile.name = document.getElementById('input-name').value;
-            appData.profile.avatar = document.getElementById('input-avatar').value || 'https://placehold.co/150x150/22c55e/white?text=Foto';
-            appData.profile.bio = document.getElementById('input-bio').value;
-            appData.profile.socials.instagram = document.getElementById('input-social-instagram').value;
-            appData.profile.socials.tiktok = document.getElementById('input-social-tiktok').value;
-            appData.profile.socials.whatsapp = document.getElementById('input-social-whatsapp').value;
-            saveData();
+        function queueProfileSave() {
+            window.appState.profile.name = document.getElementById('input-name').value;
+            window.appState.profile.avatar = document.getElementById('input-avatar').value || 'https://placehold.co/150';
+            window.appState.profile.bio = document.getElementById('input-bio').value;
+            window.appState.profile.socials.instagram = document.getElementById('input-social-instagram').value;
+            window.appState.profile.socials.tiktok = document.getElementById('input-social-tiktok').value;
+            window.appState.profile.socials.whatsapp = document.getElementById('input-social-whatsapp').value;
+
+            renderPreview();
+
+            clearTimeout(saveProfileTimeout);
+            saveProfileTimeout = setTimeout(() => {
+                window.syncToFirestore();
+            }, 800);
         }
 
-        // Theme Palette Selection
         function setPreviewTheme(themeName) {
-            appData.profile.previewTheme = themeName;
+            window.appState.profile.previewTheme = themeName;
             
             document.querySelectorAll('.preview-theme-btn').forEach(btn => {
                 btn.classList.remove('border-emerald-500');
                 btn.classList.add('border-transparent');
             });
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('border-emerald-500');
-                event.currentTarget.classList.remove('border-transparent');
-            }
 
-            saveData();
-            showToast('Estilo da vitrine atualizado!');
+            renderPreview();
+            window.syncToFirestore();
         }
 
-        // Open Add Modal in Mobile
         function openMobileAddModal() {
             switchView('editor');
             resetProductForm();
@@ -690,8 +772,7 @@
             formCard.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Save Product Function
-        function saveProduct(e) {
+        function saveProductForm(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value;
             const title = document.getElementById('prod-title').value;
@@ -702,10 +783,9 @@
             const featured = document.getElementById('prod-featured').checked;
 
             if (id) {
-                const index = appData.products.findIndex(p => p.id === id);
+                const index = window.appState.products.findIndex(p => p.id === id);
                 if (index !== -1) {
-                    appData.products[index] = { ...appData.products[index], title, category, price, image, link, featured };
-                    showToast('Produto atualizado!');
+                    window.appState.products[index] = { ...window.appState.products[index], title, category, price, image, link, featured };
                 }
             } else {
                 const newProduct = {
@@ -718,17 +798,18 @@
                     featured,
                     clicks: 0
                 };
-                appData.products.unshift(newProduct);
-                showToast('Novo produto adicionado!');
+                window.appState.products.unshift(newProduct);
             }
 
             resetProductForm();
-            saveData();
+            renderAdminProducts();
+            renderPreview();
+            updateStats();
+            window.syncToFirestore();
         }
 
-        // Edit Product
         function editProduct(id) {
-            const prod = appData.products.find(p => p.id === id);
+            const prod = window.appState.products.find(p => p.id === id);
             if (!prod) return;
 
             document.getElementById('prod-id').value = prod.id;
@@ -747,35 +828,41 @@
             formCard.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Reset Product Form
         function resetProductForm() {
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
             document.getElementById('form-product-title').innerHTML = `<i class="fa-solid fa-cart-plus text-emerald-500"></i> Adicionar Novo Produto / Banner`;
-            document.getElementById('save-btn-text').innerText = 'Adicionar à Vitrine';
+            document.getElementById('save-btn-text').innerText = 'Salvar no Firestore';
             document.getElementById('cancel-edit-btn').classList.add('hidden');
         }
 
-        // Delete Product
         function deleteProduct(id) {
-            appData.products = appData.products.filter(p => p.id !== id);
-            saveData();
-            showToast('Produto removido');
+            window.appState.products = window.appState.products.filter(p => p.id !== id);
+            renderAdminProducts();
+            renderPreview();
+            updateStats();
+            window.syncToFirestore();
         }
 
-        // Render Product List in Admin
         function renderAdminProducts() {
             const container = document.getElementById('admin-product-list');
-            if (appData.products.length === 0) {
+            const countBadge = document.getElementById('product-count-badge');
+            
+            if (!container || !window.appState) return;
+
+            const prods = window.appState.products || [];
+            if (countBadge) countBadge.innerText = `${prods.length} itens`;
+
+            if (prods.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-6 text-slate-400 text-xs">
                         <i class="fa-solid fa-box text-2xl mb-1 block"></i>
-                        Nenhum produto cadastrado.
+                        Nenhum produto cadastrado na nuvem.
                     </div>`;
                 return;
             }
 
-            container.innerHTML = appData.products.map(p => `
+            container.innerHTML = prods.map(p => `
                 <div class="flex items-center justify-between p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors">
                     <div class="flex items-center space-x-3 overflow-hidden">
                         <img src="${p.image}" onerror="this.src='https://placehold.co/100'" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover flex-shrink-0">
@@ -798,38 +885,50 @@
             `).join('');
         }
 
-        // Render Mobile Preview
         function renderPreview() {
-            document.getElementById('preview-name').innerText = appData.profile.name || 'Seu Nome';
-            document.getElementById('preview-avatar').src = appData.profile.avatar || 'https://placehold.co/150';
-            document.getElementById('preview-bio').innerText = appData.profile.bio || '';
+            if (!window.appState) return;
+            const prof = window.appState.profile;
+
+            document.getElementById('preview-name').innerText = prof.name || 'Seu Nome';
+            document.getElementById('preview-avatar').src = prof.avatar || 'https://placehold.co/150';
+            document.getElementById('preview-bio').innerText = prof.bio || '';
 
             const insta = document.getElementById('preview-social-instagram');
             const tiktok = document.getElementById('preview-social-tiktok');
             const whatsapp = document.getElementById('preview-social-whatsapp');
 
-            insta.style.display = appData.profile.socials.instagram ? 'inline-block' : 'none';
-            insta.href = appData.profile.socials.instagram || '#';
-
-            tiktok.style.display = appData.profile.socials.tiktok ? 'inline-block' : 'none';
-            tiktok.href = appData.profile.socials.tiktok || '#';
-
-            whatsapp.style.display = appData.profile.socials.whatsapp ? 'inline-block' : 'none';
-            whatsapp.href = appData.profile.socials.whatsapp || '#';
+            if (insta) {
+                insta.style.display = prof.socials?.instagram ? 'inline-block' : 'none';
+                insta.href = prof.socials?.instagram || '#';
+            }
+            if (tiktok) {
+                tiktok.style.display = prof.socials?.tiktok ? 'inline-block' : 'none';
+                tiktok.href = prof.socials?.tiktok || '#';
+            }
+            if (whatsapp) {
+                whatsapp.style.display = prof.socials?.whatsapp ? 'inline-block' : 'none';
+                whatsapp.href = prof.socials?.whatsapp || '#';
+            }
 
             const screen = document.getElementById('mobile-screen');
-            screen.className = `w-full h-[580px] sm:h-[640px] rounded-[28px] sm:rounded-[32px] overflow-y-auto relative p-3.5 sm:p-4 transition-all duration-300 ${appData.profile.previewTheme || 'preview-theme-emerald'}`;
+            if (screen) {
+                screen.className = `w-full h-[580px] sm:h-[640px] rounded-[28px] sm:rounded-[32px] overflow-y-auto relative p-3.5 sm:p-4 transition-all duration-300 ${prof.previewTheme || 'preview-theme-emerald'}`;
+            }
 
             renderCategoriesFilter();
 
             const searchQuery = (document.getElementById('preview-search')?.value || '').toLowerCase();
-            let filtered = appData.products.filter(p => {
-                const matchesCategory = selectedCategory === 'Todos' || p.category === selectedCategory;
+            const prods = window.appState.products || [];
+
+            let filtered = prods.filter(p => {
+                const matchesCategory = window.appState.selectedCategory === 'Todos' || p.category === window.appState.selectedCategory;
                 const matchesSearch = p.title.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
                 return matchesCategory && matchesSearch;
             });
 
             const container = document.getElementById('preview-product-list');
+            if (!container) return;
+
             if (filtered.length === 0) {
                 container.innerHTML = `<p class="text-center text-xs opacity-60 py-8">Nenhum produto encontrado.</p>`;
                 return;
@@ -851,20 +950,22 @@
             `).join('');
         }
 
-        // Render Categories Chips
         function renderCategoriesFilter() {
-            const categories = ['Todos', ...new Set(appData.products.map(p => p.category))];
+            const prods = window.appState.products || [];
+            const categories = ['Todos', ...new Set(prods.map(p => p.category))];
             const container = document.getElementById('preview-categories');
 
+            if (!container) return;
+
             container.innerHTML = categories.map(cat => `
-                <button onclick="setCategoryFilter('${cat}')" class="px-2.5 py-1 rounded-full whitespace-nowrap transition text-[10px] font-medium ${selectedCategory === cat ? 'bg-emerald-500 text-white shadow-sm' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}">
+                <button onclick="setCategoryFilter('${cat}')" class="px-2.5 py-1 rounded-full whitespace-nowrap transition text-[10px] font-medium ${window.appState.selectedCategory === cat ? 'bg-emerald-500 text-white shadow-sm' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}">
                     ${cat}
                 </button>
             `).join('');
         }
 
         function setCategoryFilter(cat) {
-            selectedCategory = cat;
+            window.appState.selectedCategory = cat;
             renderPreview();
         }
 
@@ -872,24 +973,23 @@
             renderPreview();
         }
 
-        // Register Product Link Clicks
         function registerClick(productId) {
-            appData.profile.totalClicks = (appData.profile.totalClicks || 0) + 1;
-            const prod = appData.products.find(p => p.id === productId);
+            window.appState.profile.totalClicks = (window.appState.profile.totalClicks || 0) + 1;
+            const prod = window.appState.products.find(p => p.id === productId);
             if (prod) {
                 prod.clicks = (prod.clicks || 0) + 1;
             }
-            saveData();
+            updateStats();
+            window.syncToFirestore();
         }
 
-        // Update Dashboard Stats
         function updateStats() {
-            document.getElementById('stat-views').innerText = appData.profile.views || 0;
-            document.getElementById('stat-clicks').innerText = appData.profile.totalClicks || 0;
-            document.getElementById('stat-products').innerText = appData.products.length || 0;
+            if (!window.appState) return;
+            document.getElementById('stat-views').innerText = window.appState.profile.views || 0;
+            document.getElementById('stat-clicks').innerText = window.appState.profile.totalClicks || 0;
+            document.getElementById('stat-products').innerText = (window.appState.products || []).length;
         }
 
-        // Copy Public URL
         function copyPublicLink() {
             const dummyLink = window.location.href;
             const el = document.createElement('textarea');
@@ -898,17 +998,7 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            showToast('Link da sua vitrine copiado!');
-        }
-
-        // Clear All Saved Data
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
-                appData = JSON.parse(JSON.stringify(defaultData));
-                saveData();
-                loadProfileToEditor();
-                showToast('Dados restaurados com sucesso!');
-            }
+            showToast('Link copiado!');
         }
     </script>
 </body>
